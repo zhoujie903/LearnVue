@@ -1,0 +1,61 @@
+<html>
+<head>
+  <title>Notebook</title>
+  <!-- Icons & Stylesheets -->
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/material-icons@0.3.1/iconfont/material-icons.min.css">
+</head>
+<body>
+  <!-- Include the library in the page -->
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked@1.2.4/lib/marked.min.js" >
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
+    
+
+  <!-- Notebook app -->
+  <div id="notebook">
+    <aside class="side-bar">
+      <div class="toolbar">
+        <button :title="addButtonTitle" @click="addNote"><i class="material-icons">add</i> Add Note</button>
+      </div>
+      <div class="notes">
+        <div class="note" :class="{selected: note === selectedNote}" v-for="note in sortedNotes" @click="selectNote(note)">
+          <i class="material-icons icon" v-if="note.favorite">star</i>
+          {{note.title}}
+        </div>
+      </div>
+    </aside>
+
+    <template v-if="selectedNote">
+        <!-- Main pane -->
+        <section class="main" >
+          <div class="toolbar">
+            <input v-model="selectedNote.title" placeholder="Note title">
+            <button @click="favoriteNote" title="favoriteNote note">
+              <i class="material-icons">{{ selectedNote.favorite?'star': 'star_border'}}</i>
+            </button> 
+            <button @click="removeNote" title="Remove note"><i class="material-icons">delete</i></button>
+          </div>
+          <textarea v-model="selectedNote.content"></textarea>
+          <div class="toolbar status-bar">
+            <span class="date">
+              <span class="label">Created</span>
+              <span class="value">{{selectedNote.created|date}}</span>
+            </span>
+
+          </div>
+        </section>
+
+        <!-- Preview pane -->
+        <aside class="preview" v-html="notePreview" >
+        </aside>
+    </template> 
+
+
+  </div>
+
+  <!-- Some JavaScript -->
+  <script src="script.js"></script>
+</body>
+</html>
